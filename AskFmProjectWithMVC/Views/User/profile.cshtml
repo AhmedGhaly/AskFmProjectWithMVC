@@ -1,0 +1,93 @@
+﻿@model UserWithFollowingAnswerViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<div class="text-center">
+    <img src="/Images/@Model.image"/>
+    <h1>@Model.username</h1>
+    <small>@Model.bio</small>
+    <small style="margin:10px">@Model.followers followers</small>
+    <small style="margin:10px">@Model.following follows</small>
+
+    @if (Model.ifFollow)
+    {
+        <button class="btn btn-outline-primary" onclick="AddOrRemoveFollower(event)">Follow</button>
+    }
+    else
+    {
+        <button class="btn btn-outline-primary" onclick="AddOrRemoveFollower(event)">Following</button>
+    }
+    <div>
+        <textarea placeholder="Ask Me Any Thing" cols="20" rows="6" oninput="onInput(event)"  id="question" name="questionText" class="form-input form-control"></textarea>
+        <div class="switch">
+            <input id="unkown" type="checkbox" name="unkown">
+            <label>ask as anonymous</label>
+        </div>
+        <input id="ask" disabled type="button" class="btn btn-outline-primary" onclick="onAsk()" value="Ask">
+    </div>
+</div>
+
+@if (Model.FollowingAns.Count == 0)
+{
+    <h3 class="text-center">There is No Anwer To Show</h3>
+}
+
+
+@foreach (var item in Model.FollowingAns)
+{
+    <div class="card">
+        <div class="card-header">
+            @item.user.username
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>@item.question.question_text <small style="font-size:0.5em"> @item.question.user_who_ask?.username </small></p>
+                <footer class="blockquote-footer" style="font-size:0.5em"> <cite title="Source Title">@item.question.post_date</cite></footer>
+                <p>@item.answer_text</p>
+            </blockquote>
+        </div>
+    </div>
+    <br />
+    <br />
+
+}
+
+
+@section scripts {
+    <script>
+
+        function AddOrRemoveFollower(e) {
+            fetch("/Follow/addOrRemoveFollower?followingId=@Model.id").then(t => {
+                if (e.target.innerHTML == "Follow")
+                    e.target.innerHTML = "Following";
+                else
+                    e.target.innerHTML = "Follow";
+            }).catch();
+        }
+
+      
+
+        
+
+        btn = document.getElementById("ask");
+        function onInput(e) {
+            const length = e.target.value.length;
+            if (length >= 3 && length <= 200)
+                btn.removeAttribute("disabled");
+            else
+                btn.setAttribute("disabled", "");
+        }
+        function onAsk() {
+            var question = document.getElementById("question");
+            const unkown = document.getElementById("unkown");
+            fetch("/User/ask/@Model.id?questionText=" + question.value + "&unkown=" + unkown.checked).then(r => {
+                btn.setAttribute("disabled", "");
+                question.value = "";
+            }
+            ).catch()
+        }
+    </script>
+}
+

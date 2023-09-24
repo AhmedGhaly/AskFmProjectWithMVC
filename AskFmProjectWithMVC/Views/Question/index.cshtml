@@ -1,0 +1,54 @@
+﻿@model List<Question>
+@{
+    ViewData["Title"] = "my question";
+}
+
+<h1>My Question </h1>
+@if (Model.Count == 0)
+{
+    <h3 class="text-center">There is No Data To Show</h3>
+}
+
+@foreach (var item in Model)
+{
+    <div class="card" id="@item.id">
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>@item.question_text <small style="font-size:0.5em"> @(item.user_who_ask?.username?? "unkown") </small></p>
+                <footer class="blockquote-footer" style="font-size:0.5em"> <cite title="Source Title">@item.post_date</cite></footer>
+            </blockquote>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <textarea oninput="onInput(event, @item.id)" id="answer_@item.id" rows="3" placeholder="Answer the Question" class="form-input form-control"></textarea>
+            </div>
+            <div class="col-2">
+                <button id="btn_answer_@item.id" disabled onclick="answerQuestoin(@item.id)" class="btn btn-outline-primary">Answer</button>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+@section scripts{
+    <script>
+        function answerQuestoin(question_id){
+            var answer = document.getElementById("answer_" + question_id).value;
+            fetch("/Answer/answerQuestion?question_id=" + question_id + "&answer_text=" + answer).then(res => {
+                var questionCard = document.getElementById(question_id);
+                questionCard.style = "display: none";
+            })
+        }
+
+        function onInput(e, id) {
+            var btn = document.getElementById("btn_answer_" + id);
+            const length = e.target.value.length;
+            if (length >= 3 && length <= 200)
+                btn.removeAttribute("disabled");
+            else
+                btn.setAttribute("disabled", "");
+        }
+    </script>
+}

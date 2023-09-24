@@ -1,0 +1,40 @@
+﻿@model UserWithFollowingAnswerViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (Model.FollowingAns.Count == 0)
+{
+    <h3 class="text-center">There is No Answer To Show</h3>
+}
+
+
+@foreach (var item in Model.FollowingAns)
+{
+    <div class="card">
+        <div class="card-header">
+            @item.user.username
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>@item.question.question_text <small style="font-size:0.5em"> @item.question.user_who_ask?.username </small></p>
+                <footer class="blockquote-footer" style="font-size:0.5em"> <cite title="Source Title">@item.question.post_date</cite></footer>
+                <p>@item.answer_text</p>
+            </blockquote>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <blockquote class="blockquote">
+                <p class="question">i ask you <small class="asker">abdo</small></p>
+                <footer class="timestamp">
+                    <img src="~/Images/"><span class="user_answer">abdo</span><cite class="source" title="Source Title">9/23/2023 12:50:01 AM</cite>
+                </footer>
+                <p class="answer">i answer you</p>
+            </blockquote>
+        </div>
+    </div>
+
+}

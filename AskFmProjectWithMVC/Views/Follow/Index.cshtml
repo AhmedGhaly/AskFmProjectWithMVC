@@ -1,0 +1,50 @@
+﻿@model List<Follow>
+@{
+    ViewData["Title"] = "Fllowing";
+}
+
+<h1>My Following List</h1>
+
+@if(Model.Count == 0)
+{
+    <h3 class="text-center">There is No Data To Show</h3>
+}
+
+<table class="table table-hover">
+    @foreach(var item in Model)
+    {
+        
+        <tr>
+            <td>
+                <div class="profile">
+                    <img src="/Images/@item.follower_user.image" class="profile-image" />
+                    <p class="name">@item.follower_user.username</p>
+                    <button id="@item.follower_user_id" onclick="remveFollow(@item.follower_user_id)" class="followBtn btn btn-outline-danger">UnFollow</button>
+                </div>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section Scripts {
+    <script>
+        function remveFollow(id) {
+            let btn = document.getElementById(id);
+            fetch("/Follow/addOrRemoveFollower?followingId=" + id).then(res => {
+                if (btn.innerHTML == "Follow") {
+                    btn.innerHTML = "UnFollow";
+                    btn.setAttribute("class", "followBtn btn btn-outline-danger");
+                }
+                else {
+                    btn.innerHTML = "Follow";
+                    btn.setAttribute("class", "followBtn btn btn-outline-primary");
+                }
+            }).catch();
+        }
+    </script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/FollowPage.css" asp-append-version="true" />
+}
