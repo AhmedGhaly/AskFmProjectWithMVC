@@ -47,5 +47,21 @@ namespace AskFmProjectWithMVC.Controllers
             return RedirectToAction("Index");
 
         }
+
+        public bool confirmPass (string confirmPass, string password)
+        {
+            return confirmPass == password;
+        }
+
+        public bool confirmEmail(string email, int id)
+        {
+            using (AskContext context = new AskContext())
+            {
+                User user = context.users.Where(t => t.email == email && t.id != id).FirstOrDefault();
+                if (user is null)
+                    return true;
+                return false;
+            }
+        }
     }
 }

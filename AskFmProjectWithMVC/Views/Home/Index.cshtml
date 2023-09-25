@@ -12,29 +12,54 @@
 
 @foreach (var item in Model.FollowingAns)
 {
-    <div class="card">
-        <div class="card-header">
-            @item.user.username
-        </div>
-        <div class="card-body">
-            <blockquote class="blockquote mb-0">
-                <p>@item.question.question_text <small style="font-size:0.5em"> @item.question.user_who_ask?.username </small></p>
-                <footer class="blockquote-footer" style="font-size:0.5em"> <cite title="Source Title">@item.question.post_date</cite></footer>
-                <p>@item.answer_text</p>
-            </blockquote>
-        </div>
-    </div>
 
     <div class="card">
-        <div class="card-body">
-            <blockquote class="blockquote">
-                <p class="question">i ask you <small class="asker">abdo</small></p>
-                <footer class="timestamp">
-                    <img src="~/Images/"><span class="user_answer">abdo</span><cite class="source" title="Source Title">9/23/2023 12:50:01 AM</cite>
-                </footer>
-                <p class="answer">i answer you</p>
-            </blockquote>
-        </div>
+
+        <p class="question">@item.question.question_text <a asp-action="profile" asp-controller="user" asp-route-id="@item.question.user_who_ask_id"><small class="asker">@item.question.user_who_ask?.username</small></a></p>
+        <footer class="timestamp">
+            <img src="/Images/@item.question.user_who_answer.image" class="image_answer"><span class="user_answer">@item.question.user_who_answer.username</span><br /><cite class="source" title="Source Title">@item.question.post_date</cite>
+        </footer>
+        <p class="answer">@item.answer_text</p>
+        <button  class="love-button">
+            <i onclick="addLike(@item.id, 'a')" id="emptyLove_@item.id" class="far fa-heart"></i>
+            <i id="fillLove_@item.id" onclick="addLike(@item.id, 'r')" class="disapear fas fa-heart"></i>
+            <small class="numberOfLikes numberOfLikes_@item.id">@item.likeCount</small>
+        </button>
     </div>
 
+}
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        function addLike(id, flag) {
+            var counter = document.getElementsByClassName("numberOfLikes_" + id)[0];
+            let count = Number(counter.innerHTML);
+            if (flag == 'a') {
+                fetch("/like/addLike?answerId=" + id).then(res => {
+                    count++;
+                    counter.innerHTML = count.toString();
+                }).catch();
+            } else if(flag == 'r') {
+                fetch("/like/removeLike?answerId=" + id).then(res => {
+                    count--;
+                    counter.innerHTML = count.toString();
+                }).catch();
+            }
+            counter.innerHTML = count.toString();
+            var likeBtn = document.getElementById("fillLove_" + id);
+            var emptyBtn = document.getElementById("emptyLove_" + id);
+            likeBtn.classList.toggle("disapear");
+            emptyBtn.classList.toggle("disapear");
+        }
+    </script>
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+    <style>
+        .disapear {
+            display: none !important;
+        }
+    </style>
 }

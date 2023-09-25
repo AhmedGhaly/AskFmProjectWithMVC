@@ -8,11 +8,19 @@
 <h1 class="profile-heading">My Profile</h1>
 
 <div class="profile-container">
-    <img src="/Images/@Model.image" class="profile-image" />
+    <div class="image">
+        <img src="/Images/@Model.image" class="profile-image" />
+    
+        <label for="file-input">
+            <img src="/Images/addPhoto.webp" class="add" onclick="changePhoto()" />
+        </label>
+
+
+    </div>
     <h1 class="profile-name">@Model.username</h1>
     <small class="profile-follows profile-description">@Model.bio</small><br />
     <small style="margin:10px">@Model.followers followers</small><br />
-   <button class="btn btn-outline-info">Edit The Profile</button>
+    <a asp-action="editProfile" class="btn btn-outline-info">Edit The Profile</a>
     <div>
         <textarea placeholder="Ask Me Any Thing" cols="20" rows="6" oninput="onInput(event)" id="question" name="questionText" class="form-input form-control"></textarea>
         <div class="switch">
@@ -108,6 +116,20 @@
             else
                 btn.setAttribute("disabled", "");
         }
+
+
+        const openmodel = document.querySelector('.newImage');
+        const closemodel = document.querySelector('.closeImage');
+        closemodel.addEventListener('click', () => {
+            openmodel.classList.remove('fade-in');
+            openmodel.style.display = 'none';
+        });
+
+        function changePhoto() {
+            openmodel.classList.add('fade-in');
+            openmodel.style.display = 'block';
+        }
+
     </script>
 
 }
@@ -118,6 +140,17 @@
     <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
 }
 
+
+<div class="newImage">
+    <div class="modal-content">
+        <span class="closeImage">&times;</span>
+        <h2>Change Your Photo</h2>
+        <form asp-action="updatgeImage" enctype="multipart/form-data">
+        <input accept="image/*" id="file-input" name="imageUrl" type="file" class="form-input form-control"  />
+        <input type="submit" value="Upload" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
 
 
 <div class="modal-container">

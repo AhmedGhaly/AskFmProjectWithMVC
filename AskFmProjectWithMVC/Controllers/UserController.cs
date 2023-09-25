@@ -1,7 +1,10 @@
 ﻿using AskFmProjectWithMVC.Models;
 using AskFmProjectWithMVC.ViewModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace AskFmProjectWithMVC.Controllers
 {
@@ -84,11 +87,66 @@ namespace AskFmProjectWithMVC.Controllers
                 }
             return Json(false);
         }
-
         public IActionResult editProfile() {
             int user_id = int.Parse(Request.Cookies["user_id"]);
+            using (AskContext context = new AskContext())
+            {
+                EditeUserProfile user = context.users.Where(r => r.id == user_id).Select(t => new EditeUserProfile()
+                {
+                    id= t.id,
+                    username= t.username,
+                    email= t.email,
+                    bio= t.bio
+                }).FirstOrDefault();
+                if(user is not null)
+                    return View(user);
+            }
+            return RedirectToAction("index");
+        }
 
-            return View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult editProfile(EditeUserProfile user)
+        {
+            if (ModelState.IsValid)
+            {
+                using (AskContext context = new AskContext())
+                {
+                    User myUser = context.users.Where(t => t.id == user.id).FirstOrDefault();
+
+                    myUser.email = user.email;
+                    myUser.bio = user.bio;
+                    myUser.username = user.username;
+                    context.SaveChanges();
+                }
+                    return RedirectToAction("index");
+            }
+            return RedirectToAction("editProfile", user);
+        }
+
+
+        public async Task<IActionResult>  updatgeImage(IFormFile imageUrl)
+        {
+            
+
+            if (imageUrl != null && imageUrl.Length > 0)
+            {
+
+                var fileName = Path.GetFileName(imageUrl.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageUrl.CopyToAsync(fileStream);
+                }
+
+                using (AskContext context = new AskContext())
+                {
+                    User user = context.users.Find(int.Parse(Request.Cookies["user_id"]));
+                    user.image = fileName;
+                    context.SaveChanges();
+                }
+            }
+            return RedirectToAction("index");
         }
     }
 }

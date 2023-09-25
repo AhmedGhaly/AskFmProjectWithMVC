@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model EditeUserProfile
 @{
     ViewData["Title"] = "Edit The Profile";
 }
@@ -6,5 +6,32 @@
 <h1>edit Profile</h1>
 
 
+<form asp-action="editProfile" method="post">
+    <input hidden asp-for="id" />
+    <div>
+        <label asp-for="username"></label>
+        <input class="form-input form-control" asp-for="username" />
+        <span asp-validation-for="username" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label asp-for="email"></label>
+        <input class="form-input form-control" asp-for="email" />
+        <span asp-validation-for="email" class="text-danger"></span>
+    </div>
 
 
+    <div>
+        <label asp-for="bio"></label>
+        <input class="form-input form-control" asp-for="bio" />
+        <span asp-validation-for="bio" class="text-danger"></span>
+    </div>
+
+    <input class="btn btn-outline-dark" type="submit" />
+</form>
+
+@section scripts {
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

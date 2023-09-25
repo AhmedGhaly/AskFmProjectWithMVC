@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AskFmProjectWithMVC.Models
@@ -17,15 +18,19 @@ namespace AskFmProjectWithMVC.Models
             
         public int id { get; set; }
 
-        [MaxLength(20, ErrorMessage = "username mus be less than 20 charchter")]
+        [MaxLength(20, ErrorMessage = "username must be less than 20 charchter")]
         [Display(Name ="user name")]
         [Required]
-        [MinLength(5, ErrorMessage ="username mus be greater than 5 charchter")]
+        [MinLength(5, ErrorMessage ="username must be greater than 5 charchter")]
         public string username { get; set; }
 
-        [RegularExpression("", ErrorMessage = "invlaid email")]
+        [RegularExpression(@"^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$", ErrorMessage = "invlaid email")]
         [Display(Name = "E-Mail")]
+        //[Remote("confirmEmail", "account", AdditionalFields = "id", ErrorMessage ="this email is already exist")]
         public string email { get; set; }
+
+        [Required]
+        [MinLength(3, ErrorMessage ="your password is weak")]
         [DataType(dataType:DataType.Password)]
         public string password { get; set; }
 
@@ -35,9 +40,8 @@ namespace AskFmProjectWithMVC.Models
         [NotMapped]
         [DataType(dataType:DataType.Password)]
         [Display(Name ="confirm password")]
+        [Remote("confirmPass", "account", AdditionalFields = "password", ErrorMessage ="password not matched")]
         public string confirmPass { get; set; }
-        [MaxLength(10)]
-        public string username_id { get; set; }
 
         public string? image { get; set; }
         public string? bio { get; set; }
