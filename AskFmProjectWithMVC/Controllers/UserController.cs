@@ -132,8 +132,10 @@ namespace AskFmProjectWithMVC.Controllers
             if (imageUrl != null && imageUrl.Length > 0)
             {
 
-                var fileName = Path.GetFileName(imageUrl.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", fileName);
+                var extention = Path.GetExtension(imageUrl.FileName);
+                var fileName = Path.GetFileNameWithoutExtension(imageUrl.FileName);
+                var imageName = fileName.Replace(" ", "") + Request.Cookies["user_id"] + extention;
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", imageName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await imageUrl.CopyToAsync(fileStream);
@@ -142,11 +144,29 @@ namespace AskFmProjectWithMVC.Controllers
                 using (AskContext context = new AskContext())
                 {
                     User user = context.users.Find(int.Parse(Request.Cookies["user_id"]));
-                    user.image = fileName;
+
+                    string path = @"wwwroot\images\" + user.image;
+                    FileInfo file = new FileInfo(path);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                    user.image = imageName;
                     context.SaveChanges();
                 }
             }
             return RedirectToAction("index");
+        }
+
+
+        public IActionResult getUserName()
+        {
+            int user_id = int.Parse(Request.Cookies["user_id"]);
+            using (var context = new AskContext())
+            {
+                User user = context.users.Find(user_id);
+                return Json( new { user.image , user.username});
+            }
         }
     }
 }

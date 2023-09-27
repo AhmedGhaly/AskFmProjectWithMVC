@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/AskFmProjectWithMVC.styles.css" asp-append-version="true" />
     @RenderSection("styles", false)
 </head>
-<body>
+<body onload="onloadBody()">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -36,6 +36,12 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                         </li>
                     </ul>
+                    <div>
+                        <div class="row">
+                            <img class="col-5" id="user_img" />
+                            <p class="col-8" id="user_name"></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -54,6 +60,19 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function onloadBody() {
+            fetch("/user/getUserName").then(res => {
+                return res.json();
+            }).then(res => {
+                var user_name = document.getElementById("user_name");
+                user_name.innerHTML = "Hi, " + res.username;
+                var user_image = document.getElementById("user_img");
+                user_image.setAttribute("src", `/images/${res.image}`)
+            })
+        }
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

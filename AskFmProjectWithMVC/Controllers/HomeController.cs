@@ -1,5 +1,6 @@
 ﻿using AskFmProjectWithMVC.Models;
 using AskFmProjectWithMVC.ViewModel;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -26,8 +27,14 @@ namespace AskFmProjectWithMVC.Controllers
 
                 foreach (var item in user.following)
                 {
+                    //myFollowerAnswer.FollowingAns.AddRange ( item.follower_user.answers);
                     foreach (var ans in item.follower_user.answers)
                     {
+                        string input = ans.id.ToString();
+                        if (amIReact(ans.id))
+                            ViewData[input] = true;
+                        else
+                            ViewData[input] = false;
                         myFollowerAnswer.FollowingAns.Add(ans);
                     }
                 }
@@ -38,7 +45,20 @@ namespace AskFmProjectWithMVC.Controllers
             }
             return View(myFollowerAnswer); 
         }
-
         
+        public bool amIReact(int answer_id)
+        {
+            int user_id = int.Parse(Request.Cookies["user_id"]);
+            using (AskContext context = new AskContext())
+            {
+                Like like = context.likes.Where(l => l.answer_id == answer_id && l.user_id == user_id).FirstOrDefault();
+                if (like is not null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

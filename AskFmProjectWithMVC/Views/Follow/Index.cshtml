@@ -18,7 +18,7 @@
             <td>
                 <div class="profile">
                     <img src="/Images/@item.follower_user.image" class="profile-image" />
-                    <p class="name">@item.follower_user.username</p>
+                    <a asp-controller="user" asp-action="profile" asp-route-id="@item.follower_user_id"><p class="name text-black">@item.follower_user.username</p></a>
                     <button id="@item.follower_user_id" onclick="remveFollow(@item.follower_user_id)" class="followBtn btn btn-outline-danger">UnFollow</button>
                 </div>
             </td>

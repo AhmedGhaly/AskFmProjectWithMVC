@@ -25,7 +25,7 @@ namespace AskFmProjectWithMVC.Controllers
         {
             using(AskContext context = new AskContext())
             {
-                var myUser = context.users.Select(t => new {t.id, t.email,t.password}).FirstOrDefault(t => t.email == user.email);
+                var myUser = context.users.Select(t => new {t.id, t.email,t.password,t.username,t.image}).FirstOrDefault(t => t.email == user.email);
                 if(myUser is not null) {
                     if(myUser.password == user.password)
                     {
@@ -33,6 +33,8 @@ namespace AskFmProjectWithMVC.Controllers
                         CookieOptions s= new CookieOptions();
                         s.Expires = DateTimeOffset.Now.AddDays(10);
                         Response.Cookies.Append("user_id", myUser.id.ToString(), s);
+                        Response.Cookies.Append("user_image", myUser.image, s);
+                        Response.Cookies.Append("user_name", myUser.username, s);
                         
                         return RedirectToAction("index", "home");
                     }

@@ -25,6 +25,7 @@ img {
     margin-right: 10px;
 }
 
+
 button :disabled {
     background-color: #ccc;
     cursor: not-allowed;

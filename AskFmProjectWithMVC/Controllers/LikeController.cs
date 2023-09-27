@@ -12,7 +12,7 @@ namespace AskFmProjectWithMVC.Controllers
             int user_id = int.Parse(Request.Cookies["user_id"]);
             using (AskContext context = new AskContext()) {
                 Answer ans = context.answers.Find(answerId);
-                Like check = context.likes.Where(r => r.user_id == user_id).FirstOrDefault();
+                Like check = context.likes.Where(r => r.user_id == user_id && r.answer_id == answerId).FirstOrDefault();
                 Like like = new Like()
                 {
                     answer_id = answerId,
@@ -38,7 +38,7 @@ namespace AskFmProjectWithMVC.Controllers
             using (AskContext context = new AskContext())
             {
                 Answer ans = context.answers.Find(answerId);
-                Like check = context.likes.Where(r => r.user_id == user_id).FirstOrDefault();
+                Like check = context.likes.Where(r => r.user_id == user_id && r.answer_id == answerId).FirstOrDefault();
 
                 if (ans != null && check is not null)
                 {
@@ -52,9 +52,13 @@ namespace AskFmProjectWithMVC.Controllers
             }
         }
 
-        public IActionResult Index()
+        public IActionResult usersWhoLike(int answer_id)
         {
-            return View();
+            using (AskContext context = new AskContext())
+            {
+                return Json(context.likes.Where(r => r.answer_id == answer_id).Select(t => t.user).Select(r => r.username).ToList() );
+            }
         }
     }
 }
+

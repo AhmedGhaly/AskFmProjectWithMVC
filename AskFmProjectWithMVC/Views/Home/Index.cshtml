@@ -21,9 +21,20 @@
         </footer>
         <p class="answer">@item.answer_text</p>
         <button  class="love-button">
-            <i onclick="addLike(@item.id, 'a')" id="emptyLove_@item.id" class="far fa-heart"></i>
-            <i id="fillLove_@item.id" onclick="addLike(@item.id, 'r')" class="disapear fas fa-heart"></i>
-            <small class="numberOfLikes numberOfLikes_@item.id">@item.likeCount</small>
+
+            @if ((bool)ViewData[item.id.ToString()])
+            {
+                
+                <i id="fillLove_@item.id" onclick="addLike(@item.id, 'r')" class="fas fa-heart"></i>
+                <i onclick="addLike(@item.id, 'a')" id="emptyLove_@item.id" class="disapear far fa-heart"></i>
+
+            }
+            else {
+                <i id = "fillLove_@item.id" onclick = "addLike(@item.id, 'r')" class="disapear fas fa-heart"></i>
+                <i onclick="addLike(@item.id, 'a')" id="emptyLove_@item.id" class="far fa-heart"></i>
+            }
+
+            <small onclick="showLikes(@item.id)" class="numberOfLikes numberOfLikes_@item.id">@item.likeCount</small>
         </button>
     </div>
 
@@ -32,6 +43,9 @@
 @section scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script>
+
+
+
         function addLike(id, flag) {
             var counter = document.getElementsByClassName("numberOfLikes_" + id)[0];
             let count = Number(counter.innerHTML);
@@ -52,6 +66,43 @@
             likeBtn.classList.toggle("disapear");
             emptyBtn.classList.toggle("disapear");
         }
+
+
+        const modalContainer = document.querySelector('.modal-container');
+        const closeModal = document.querySelector('.close');
+        closeModal.addEventListener('click', closeModel);
+        function closeModel() {
+            modalContainer.classList.remove('fade-in');
+            modalContainer.style.display = 'none';
+        }
+        function edite_answer(id, answer_text) {
+            
+
+        }
+        
+        
+        function showLikes(id) {
+            fetch("/like/usersWhoLike?answer_id=" + id).then(res => {
+                return res.json()
+
+            }).then(s => {
+                modalContainer.classList.add('fade-in');
+                modalContainer.style.display = 'block';
+                let div = document.getElementById("users");
+                div.innerHTML = "";
+                s.map((item, index) => {
+                    var child = document.createElement("p");
+                    child.setAttribute("class", "userWhoLove")
+                    child.innerHTML = item;
+                    div.appendChild(child);
+                })
+
+            })
+            .catch();
+        }
+
+
+
     </script>
 }
 
@@ -63,3 +114,11 @@
         }
     </style>
 }
+
+<div class="modal-container">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>People Loved Answer</h2>
+        <div id="users"></div>
+    </div>
+</div>
