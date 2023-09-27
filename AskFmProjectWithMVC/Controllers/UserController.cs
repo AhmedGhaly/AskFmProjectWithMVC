@@ -32,6 +32,15 @@ namespace AskFmProjectWithMVC.Controllers
                     ifFollow = iffollow is null? true: false 
                 };
 
+                foreach (var ans in myuser.FollowingAns)
+                {
+                    string input = ans.id.ToString();
+                    if (amIReact(ans.id))
+                        ViewData[input] = true;
+                    else
+                        ViewData[input] = false;
+                }
+
                 myuser.followers = user.follower.Count();
                 myuser.following = user.following.Count();
 
@@ -59,6 +68,15 @@ namespace AskFmProjectWithMVC.Controllers
                     username = user.username,
                     FollowingAns = user.answers.OrderBy(o => o.post_date).ToList(),
                 };
+
+                foreach (var ans in myuser.FollowingAns)
+                {
+                    string input = ans.id.ToString();
+                    if (amIReact(ans.id))
+                        ViewData[input] = true;
+                    else
+                        ViewData[input] = false;
+                }
 
                 myuser.followers = user.follower.Count();
                 myuser.following = user.following.Count();
@@ -167,6 +185,21 @@ namespace AskFmProjectWithMVC.Controllers
                 User user = context.users.Find(user_id);
                 return Json( new { user.image , user.username});
             }
+        }
+
+        bool amIReact(int answer_id)
+        {
+            int user_id = int.Parse(Request.Cookies["user_id"]);
+            using (AskContext context = new AskContext())
+            {
+                Like like = context.likes.Where(l => l.answer_id == answer_id && l.user_id == user_id).FirstOrDefault();
+                if (like is not null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

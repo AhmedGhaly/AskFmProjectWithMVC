@@ -31,3 +31,6 @@ button :disabled {
     cursor: not-allowed;
     color: #000f;
 }
+.disapear {
+    display: none !important;
+}

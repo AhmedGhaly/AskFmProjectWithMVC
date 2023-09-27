@@ -27,7 +27,6 @@ namespace AskFmProjectWithMVC.Controllers
 
                 foreach (var item in user.following)
                 {
-                    //myFollowerAnswer.FollowingAns.AddRange ( item.follower_user.answers);
                     foreach (var ans in item.follower_user.answers)
                     {
                         string input = ans.id.ToString();
@@ -45,8 +44,7 @@ namespace AskFmProjectWithMVC.Controllers
             }
             return View(myFollowerAnswer); 
         }
-        
-        public bool amIReact(int answer_id)
+        bool amIReact(int answer_id)
         {
             int user_id = int.Parse(Request.Cookies["user_id"]);
             using (AskContext context = new AskContext())
@@ -60,5 +58,6 @@ namespace AskFmProjectWithMVC.Controllers
 
             return false;
         }
+
     }
 }

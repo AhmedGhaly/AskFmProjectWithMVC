@@ -68,7 +68,7 @@ namespace AskFmProjectWithMVC.Controllers
         public IActionResult Logout()
         {
             Response.Cookies.Append("user_id", "");
-            return RedirectToAction("Index");
+            return RedirectToAction("login");
 
         }
 

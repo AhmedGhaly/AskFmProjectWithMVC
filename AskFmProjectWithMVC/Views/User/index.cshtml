@@ -49,6 +49,23 @@
                     <cite class="source" title="Source Title">@item.post_date</cite> <!--@(item.question.post_date - DateTime.Now) -->
                 </div>
                 <h6 class="answer" id="theAnsewer_@item.id">@item.answer_text</h6>
+                <button class="love-button">
+
+                    @if ((bool)ViewData[item.id.ToString()])
+                    {
+
+                        <i id="fillLove_@item.id" onclick="addLike(@item.id, 'r')" class="fas fa-heart"></i>
+                        <i onclick="addLike(@item.id, 'a')" id="emptyLove_@item.id" class="disapear far fa-heart"></i>
+
+                    }
+                    else
+                    {
+                        <i id="fillLove_@item.id" onclick="addLike(@item.id, 'r')" class="disapear fas fa-heart"></i>
+                        <i onclick="addLike(@item.id, 'a')" id="emptyLove_@item.id" class="far fa-heart"></i>
+                    }
+
+                    <small onclick="showLikes(@item.id)" class="numberOfLikes numberOfLikes_@item.id">@item.likeCount</small>
+                </button>
                 <button onclick="edite_answer(@item.id, '@item.answer_text')" class="edit_btn btn btn-outline-info">Edit</button>
                 <button onclick="deleteAnswer(@item.id)" class="delete_btn btn btn-outline-danger">Delete</button>
             </div>
@@ -97,6 +114,46 @@
                 question.value = "";
             }
             ).catch() 
+        }
+
+        function showLikes(id) {
+            fetch("/like/usersWhoLike?answer_id=" + id).then(res => {
+                return res.json()
+
+            }).then(s => {
+                modalContainer.classList.add('fade-in');
+                modalContainer.style.display = 'block';
+                let div = document.getElementById("users");
+                div.innerHTML = "";
+                s.map((item, index) => {
+                    var child = document.createElement("p");
+                    child.setAttribute("class", "userWhoLove")
+                    child.innerHTML = item;
+                    div.appendChild(child);
+                })
+
+            }).catch();
+        }
+
+        function addLike(id, flag) {
+            var counter = document.getElementsByClassName("numberOfLikes_" + id)[0];
+            let count = Number(counter.innerHTML);
+            if (flag == 'a') {
+                fetch("/like/addLike?answerId=" + id).then(res => {
+                    count++;
+                    counter.innerHTML = count.toString();
+                }).catch();
+            } else if (flag == 'r') {
+                fetch("/like/removeLike?answerId=" + id).then(res => {
+                    count--;
+                    counter.innerHTML = count.toString();
+                }).catch();
+            }
+            counter.innerHTML = count.toString();
+            var likeBtn = document.getElementById("fillLove_" + id);
+            var emptyBtn = document.getElementById("emptyLove_" + id);
+            likeBtn.classList.toggle("disapear");
+            emptyBtn.classList.toggle("disapear");
         }
 
 
