@@ -26,7 +26,7 @@ namespace AskFmProjectWithMVC.Models
 
         [RegularExpression(@"^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$", ErrorMessage = "invlaid email")]
         [Display(Name = "E-Mail")]
-        //[Remote("confirmEmail", "account", AdditionalFields = "id", ErrorMessage ="this email is already exist")]
+        [Remote("confirmEmail", "account", AdditionalFields = "id", ErrorMessage ="this email is already exist")]
         public string email { get; set; }
 
         [Required]

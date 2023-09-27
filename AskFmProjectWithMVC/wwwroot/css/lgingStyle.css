@@ -15,6 +15,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+    flex-direction: column;
     min-height: 100vh;
 }
 
@@ -23,6 +24,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .section-title {
@@ -32,57 +34,13 @@ body {
 }
 
 .forms {
-    display: flex;
     align-items: flex-start;
     margin-top: 30px;
+    width: 60%
 }
 
-.form-wrapper {
-    animation: hideLayer .3s ease-out forwards;
-}
+    
 
-    .form-wrapper.is-active {
-        animation: showLayer .3s ease-in forwards;
-    }
-
-@keyframes showLayer {
-    50% {
-        z-index: 1;
-    }
-
-    100% {
-        z-index: 1;
-    }
-}
-
-@keyframes hideLayer {
-    0% {
-        z-index: 1;
-    }
-
-    49.999% {
-        z-index: 1;
-    }
-}
-
-.switcher {
-    position: relative;
-    cursor: pointer;
-    display: block;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 0;
-    text-transform: uppercase;
-    font-family: inherit;
-    font-size: 16px;
-    letter-spacing: .5px;
-    color: #999;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    transform: translateX(0);
-    transition: all .3s ease-out;
-}
 
 .form-wrapper.is-active .switcher-login {
     color: #fff;
@@ -104,28 +62,16 @@ body {
     height: 2px;
 }
 
-    .underline::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: inherit;
-        display: block;
-        width: inherit;
-        height: inherit;
-        background-color: currentColor;
-        transition: transform .2s ease-out;
-    }
-
-.switcher-login .underline::before {
-    transform: translateX(101%);
-}
-
-.switcher-signup .underline::before {
-    transform: translateX(-101%);
-}
-
-.form-wrapper.is-active .underline::before {
-    transform: translateX(0);
+.underline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: inherit;
+    display: block;
+    width: inherit;
+    height: inherit;
+    background-color: currentColor;
+    transition: transform .2s ease-out;
 }
 
 .form {
@@ -138,84 +84,14 @@ body {
 }
 
 .form-login {
-    animation: hideLogin .3s ease-out forwards;
+    height: 60%
 }
 
-.form-wrapper.is-active .form-login {
-    animation: showLogin .3s ease-in forwards;
-}
-
-@keyframes showLogin {
-    0% {
-        background: #d7e7f1;
-        transform: translate(40%, 10px);
-    }
-
-    50% {
-        transform: translate(0, 0);
-    }
-
-    100% {
-        background-color: #fff;
-        transform: translate(35%, -20px);
-    }
-}
-
-@keyframes hideLogin {
-    0% {
-        background-color: #fff;
-        transform: translate(35%, -20px);
-    }
-
-    50% {
-        transform: translate(0, 0);
-    }
-
-    100% {
-        background: #d7e7f1;
-        transform: translate(40%, 10px);
-    }
-}
 
 .form-signup {
     animation: hideSignup .3s ease-out forwards;
 }
 
-.form-wrapper.is-active .form-signup {
-    animation: showSignup .3s ease-in forwards;
-}
-
-@keyframes showSignup {
-    0% {
-        background: #d7e7f1;
-        transform: translate(-40%, 10px) scaleY(.8);
-    }
-
-    50% {
-        transform: translate(0, 0) scaleY(.8);
-    }
-
-    100% {
-        background-color: #fff;
-        transform: translate(-35%, -20px) scaleY(1);
-    }
-}
-
-@keyframes hideSignup {
-    0% {
-        background-color: #fff;
-        transform: translate(-35%, -20px) scaleY(1);
-    }
-
-    50% {
-        transform: translate(0, 0) scaleY(.8);
-    }
-
-    100% {
-        background: #d7e7f1;
-        transform: translate(-40%, 10px) scaleY(.8);
-    }
-}
 
 .form fieldset {
     position: relative;
@@ -249,27 +125,33 @@ body {
 }
 
 .input-block {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+
 }
 
-    .input-block label {
-        font-size: 14px;
-        color: #a1b4b4;
-    }
+.input-block label {
+    font-size: 14px;
+    color: #a1b4b4;
+}
+.input-block span {
+    font-size: 14px;
+    color: red;
+    margin: 0px !important
+}
 
-    .input-block input {
-        display: block;
-        width: 100%;
-        margin-top: 8px;
-        padding-right: 15px;
-        padding-left: 15px;
-        font-size: 16px;
-        line-height: 40px;
-        color: #3b4465;
-        background: #eef9fe;
-        border: 1px solid #cddbef;
-        border-radius: 2px;
-    }
+.input-block input {
+    margin-top: 8px;
+    padding-right: 15px;
+    padding-left: 15px;
+    font-size: 16px;
+    line-height: 40px;
+    color: #3b4465;
+    background: #eef9fe;
+    border: 1px solid #cddbef;
+    border-radius: 30px;
+    width: 100%;
+}
 
 .form [type='submit'] {
     opacity: 0;

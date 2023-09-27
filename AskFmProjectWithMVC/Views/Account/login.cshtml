@@ -1,0 +1,39 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "login";
+    Layout = "_AccountLayout";
+}
+
+<section class="forms-section">
+    <h1 class="section-title">Login to ASK</h1>
+    <div class="forms">
+        <div class="form-wrapper is-active">
+            <form class="form form-login" method="post" asp-action="login">
+                <fieldset>
+                    <legend>Please, enter your email and password for login.</legend>
+                    <div class="input-block">
+                        <label asp-for="email"></label>
+                        <input asp-for="email" class="inputs">
+                        <span asp-validation-for="email"></span>
+                    </div>
+                    <div class="input-block">
+                        <label asp-for="password"></label>
+                        <input asp-for="password">
+                        <span asp-validation-for="password"></span>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<h4><a asp-action="signup">Create Account</a></h4>
+
+@section scripts {
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
