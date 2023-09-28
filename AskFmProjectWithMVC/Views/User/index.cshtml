@@ -9,7 +9,7 @@
 
 <div class="profile-container">
     <div class="image">
-        <img src="/Images/@Model.image" class="profile-image" />
+        <img src="/Images/@Model.image" />
     
         <label for="file-input">
             <img src="/Images/addPhoto.webp" class="add" onclick="changePhoto()" />
@@ -42,12 +42,14 @@
 
     <div class="card" id="@item.id">
         <div class="card-body">
-                <img src="/Images/@Model.image"  />
+            
             <div class="content">
                 <p class="question">@item.question.question_text <small><a asp-action="profile" asp-route-id="@item.question.user_who_ask_id" class="asker">@item.question.user_who_ask?.username  </a></small></p>
-                <div class="timestamp">
-                    <cite class="source" title="Source Title">@item.post_date</cite> <!--@(item.question.post_date - DateTime.Now) -->
+                <div class="row">
+                    @* <img src="/Images/@Model.image" class="images" /> *@
+                        <cite class="source" title="Source Title">@item.post_date</cite> <!--@(item.question.post_date - DateTime.Now) -->
                 </div>
+                <hr>
                 <h6 class="answer" id="theAnsewer_@item.id">@item.answer_text</h6>
                 <button class="love-button">
 

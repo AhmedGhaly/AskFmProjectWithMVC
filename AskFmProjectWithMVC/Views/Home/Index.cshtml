@@ -16,9 +16,15 @@
     <div class="card">
 
         <p class="question">@item.question.question_text <a asp-action="profile" asp-controller="user" asp-route-id="@item.question.user_who_ask_id"><small class="asker">@item.question.user_who_ask?.username</small></a></p>
-        <footer class="timestamp">
-            <img src="/Images/@item.question.user_who_answer.image" class="image_answer"><span class="user_answer">@item.question.user_who_answer.username</span><br /><cite class="source" title="Source Title">@item.question.post_date</cite>
-        </footer>
+        <div>
+            <img src="/Images/@item.question.user_who_answer.image" class="images imageAnswer">
+            <footer class="timestamp">
+                <span class="user_answer">@item.question.user_who_answer.username</span><br />
+                <cite class="source" title="Source Title">@item.question.post_date</cite>
+                <hr>
+            </footer>
+        </div>
+
         <p class="answer">@item.answer_text</p>
         <button  class="love-button">
 

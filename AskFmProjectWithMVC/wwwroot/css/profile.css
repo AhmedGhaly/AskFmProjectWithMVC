@@ -48,10 +48,13 @@
     font-size: 0.8em;
     color: #657786;
     margin-bottom: 5px;
+    margin-top: 20px
 }
 
 .source {
     font-style: italic;
+    font-size: 0.8em;
+    color: #657786;
 }
 
 .image_answer {
@@ -83,18 +86,13 @@
     display: none;
 }
 
-.profile-image {
-    max-block-size: 150px;
-    border-radius: 50%;
-}
-
 .add {
     position: relative;
     cursor: pointer;
     right: 40px;
     width: 40px;
     height: 40px;
-    top: 45px
+    top: 60px
 }
 .profile-name {
     margin-top: 10px;
